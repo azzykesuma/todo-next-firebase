@@ -11,12 +11,18 @@ import {
   Checkbox,
   Alert
  } from '@mui/material'
-
+import Router from 'next/router'
 import FacebookIcon from '@mui/icons-material/Facebook';
 import GoogleIcon from '@mui/icons-material/Google';
 import Link from 'next/link';
 // firebase functions
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+  FacebookAuthProvider 
+ } from "firebase/auth";
 
 
 export default function Home() {
@@ -38,9 +44,9 @@ export default function Home() {
     setChecked(!checked);
   }
 
+  const auth = getAuth();
   const handleSubmit = e => {
       e.preventDefault()
-      const auth = getAuth();
 
     if(checked){
       createUserWithEmailAndPassword(auth,email,password)
@@ -48,6 +54,9 @@ export default function Home() {
           console.log(cred.user);
           setError('');
           setSuccess('User created successfully, redirecting to homepage in 3 seconds...');
+          setTimeout(() => {
+              Router.push('/Home');
+          },3000)
       })
       .catch(err => {
           console.log(err.message);
@@ -56,6 +65,37 @@ export default function Home() {
         setError('Please accept the terms and conditions');
     }
   }
+  // google login
+  const handleGoogleLogin = e => {
+    e.preventDefault();
+    const provider = new GoogleAuthProvider(); 
+    signInWithPopup(auth,provider)
+      .then(res => {
+        const cred = GoogleAuthProvider.credentialFromResult(res);
+        const token = cred.accessToken;
+        const user = res.user
+        Router.push('/Home');
+      })
+      .catch(err => {
+        console.log(err.message);
+      })
+  }
+  // facebook login
+  const handleFacebookLogin = e => {
+    e.preventDefault();
+    const provider = new FacebookAuthProvider();
+    signInWithPopup(auth,provider)
+    .then(res => {
+      const user = res.user
+      const cred = FacebookAuthProvider.credentialFromResult(res);
+      const accessToken = cred.accessToken;
+      Router.push('/Home');
+    })
+    .catch(err => {
+      console.log(err.message);
+    })
+  }
+
   return (
     <Container
     maxWidth="md"
@@ -104,6 +144,7 @@ export default function Home() {
           width : '250px',
           mb: '20px'
         }}
+        onClick={handleGoogleLogin}
         >Sign up with Google</Button>
         <Button
         variant='contained'
@@ -114,6 +155,7 @@ export default function Home() {
           width : '250px',
           marginBottom: '20px'
         }}
+        onClick={handleFacebookLogin}
         >Sign up with Facebook</Button>
       </Box>
         <Divider />

@@ -9,6 +9,7 @@ import {
 import Link from 'next/link'
 // firebase functions
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import Router from 'next/router';
 
 const Signin = () => {
     const [email,setEmail] = useState("");
@@ -29,6 +30,7 @@ const Signin = () => {
         signInWithEmailAndPassword(auth,email,password)
             .then(cred => {
                 console.log(`user ${cred.user.email} signed in`);
+                Router.push('/Home');
             })
             .catch(err => {
                 console.log(err.message);
