@@ -16,7 +16,9 @@ function MyApp({ Component, pageProps }) {
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
 
-  return <Component {...pageProps} />
+  return (
+      <Component {...pageProps} />
+  ) 
 }
 
 export default MyApp
