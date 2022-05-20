@@ -1,5 +1,6 @@
 import '../styles/globals.css'
 import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
 
 
 
@@ -15,6 +16,7 @@ function MyApp({ Component, pageProps }) {
   
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
   return (
       <Component {...pageProps} />

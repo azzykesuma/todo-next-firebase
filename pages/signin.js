@@ -115,7 +115,7 @@ const Signin = () => {
             sx={{
               mt: '20px'
             }}
-            >Don't have an Account? <Link href="/">Sign Up</Link> here</Typography>
+            >Dont have an Account? <Link href="/">Sign Up</Link> here</Typography>
             </Box>
         </Box>
         </Container>

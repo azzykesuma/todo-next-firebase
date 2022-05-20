@@ -7,22 +7,30 @@ import Router from 'next/router';
 import {
     Alert,
     Container,
-    Typography,
-    Paper
+    Typography
 } from '@mui/material';
 import Navbar from '../Component/Navbar';
 import { format } from 'date-fns'
+// components
+import SpendingData from '../Component/SpendingCard';
+import BottomBar from '../Component/bottomBar';
+// firestore
+import { 
+    collection,
+    addDoc,
+    getDocs
+} from "firebase/firestore"; 
 
 const home = () => {
     const auth = getAuth();
     const user = auth.currentUser
     const today = format(new Date(), 'dd/MM/yyyy')
     
-    useEffect(() => {
-        if(!user) {
-            Router.push('/signin');
-        }
-    })
+    // useEffect(() => {
+    //     if(!user) {
+    //         Router.push('/signin');
+    //     }
+    // })
     // sign out functions
     const handleSignOut = () => {
         signOut(auth)
@@ -33,25 +41,17 @@ const home = () => {
                 console.log(err.message);
             })
     }
+    const querySnapshot =  getDocs(collection(db,"spending"));
+    console.log(querySnapshot);
     return (
         <>
             <Navbar />
-            <Container maxWidth="lg">
-                { user ? null : <Alert severity='error'>You need to sign in to see this content</Alert>}
-                <Typography sx={{
-                    marginTop: '20px',
-                    fontFamily: 'Quicksand',
-                    component: 'body1',
-                    variant: 'h4'
-                }}>
-                    {today}
-                </Typography>
-                <Paper
-                color='primary'
-                >
-                    test
-                </Paper>
+            <Container 
+            maxWidth="lg"
+            >
+                {/* { user ? null : <Alert severity='error'>You need to sign in to see this content</Alert>} */}
             </Container>
+            <BottomBar />
         </>
     );
 }
