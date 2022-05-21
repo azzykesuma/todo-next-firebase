@@ -4,11 +4,21 @@ import {
     Box,
     IconButton,
 } from '@mui/material';
+import { onSnapshot } from 'firebase/firestore';
 
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-const SpendingData = ({today}) => {
+const SpendingData = ({today,query}) => {
+    
+    const data = onSnapshot(query,snapshot => {
+        let spending = [];
+        snapshot.docs.forEach(doc => {
+            spending.push({...doc.data(), id: doc.id})
+        })
+        console.log(spending);
+    })
+    console.log(query)
     return (
         <Box
         maxWidth='sm'
@@ -54,7 +64,7 @@ const SpendingData = ({today}) => {
                             color : '#262322'
                         }}
                         >
-                            +Rp. 100.000
+                            +100.000
                         </Typography>
                     </Box>
                     <Box

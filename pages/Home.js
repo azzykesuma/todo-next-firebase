@@ -18,14 +18,21 @@ import BottomBar from '../Component/bottomBar';
 import { 
     collection,
     addDoc,
-    getDocs
+    getDoc,
+    getDocs,
+    getFirestore,
+    doc,
+    query,
+    orderBy
 } from "firebase/firestore"; 
+import { app } from './_app'
 
 const home = () => {
     const auth = getAuth();
     const user = auth.currentUser
     const today = format(new Date(), 'dd/MM/yyyy')
-    
+    const db = getFirestore(app);
+
     // useEffect(() => {
     //     if(!user) {
     //         Router.push('/signin');
@@ -41,8 +48,14 @@ const home = () => {
                 console.log(err.message);
             })
     }
-    const querySnapshot =  getDocs(collection(db,"spending"));
-    console.log(querySnapshot);
+    const docRef = doc(db,"spending");
+    const docSnap = getDoc(docRef)
+    const q = db.collection('spending').orderBy('date','desc').limit(10);
+    const querySnapshot = getDocs(q);
+    querySnapshot.forEach(doc => {
+        console.log(doc.id, " => ", doc.data());
+    })
+    console.log(q);
     return (
         <>
             <Navbar />
@@ -50,6 +63,7 @@ const home = () => {
             maxWidth="lg"
             >
                 {/* { user ? null : <Alert severity='error'>You need to sign in to see this content</Alert>} */}
+                <SpendingData query={q}/>
             </Container>
             <BottomBar />
         </>
