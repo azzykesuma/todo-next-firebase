@@ -1,13 +1,15 @@
 import {
     Box,
     Typography,
-    IconButton
+    IconButton,
+    Button
 } from '@mui/material';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ArticleIcon from '@mui/icons-material/Article';
 
-const BottomBar = () => {
+const BottomBar = ({handleOpen}) => {
+
     return (
         <Box
         component='footer'
@@ -23,7 +25,7 @@ const BottomBar = () => {
         }}
         >
             <IconButton><AccountBalanceWalletIcon fontSize='large'/></IconButton>
-            <IconButton><AddCircleIcon fontSize='large' /></IconButton>
+            <Button disableRipple onClick={handleOpen}><IconButton><AddCircleIcon fontSize='large' /></IconButton></Button>
             <IconButton><ArticleIcon fontSize='large' /></IconButton>
         </Box>
     );
